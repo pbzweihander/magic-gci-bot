@@ -30,7 +30,7 @@ async fn transmit(
     openai_config: &OpenAiConfig,
     srs_sink: &mut SplitSink<VoiceStream, Vec<u8>>,
 ) -> anyhow::Result<()> {
-    let speech_ogg = crate::api::openai::speech(&openai_config, &line).await?;
+    let speech_ogg = crate::api::openai::speech(openai_config, &line).await?;
     let mut ogg_reader = ogg::PacketReader::new(Cursor::new(speech_ogg));
 
     ogg_reader
