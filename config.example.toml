@@ -1,0 +1,21 @@
+[tacview]
+host = "example.com"
+port = 42674
+username = "magic-bot"
+#password = ""
+
+[srs]
+host = "example.com"
+port = 5002
+username = "Magic Bot"
+# If your SRS server do not have EAM password, set it to ""
+password = ""
+# One of "Spectator", "Blue", "Red"
+coalition = "Blue"
+frequency = 134000000
+
+[openai]
+api_key = "OPENAI_API_KEY"
+# Available voices: https://platform.openai.com/docs/guides/text-to-speech/voice-options
+speech_voice = "alloy"
+speech_speed = 1.0
