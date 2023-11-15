@@ -1,7 +1,6 @@
 # magic-gci-bot
 
-_magic-gci-bot_ is an AI GCI/AWACS bot for DCS utilizing SimpleRadioStandalone, OpenAI speech recognition, and OpenAI speech generation.
-_MagicBot_ is a partial successor of OverlordBot.
+_magic-gci-bot_ or _MagicBot_ is an AI GCI/AWACS bot for DCS utilizing SimpleRadioStandalone, OpenAI speech recognition, and OpenAI speech generation.
 
 __Currently work in progress and more like a proof of concept__
 
