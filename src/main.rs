@@ -75,11 +75,13 @@ async fn main() -> anyhow::Result<()> {
     let (transmission_tx, transmission_rx) = tokio::sync::mpsc::unbounded_channel();
 
     // Init state
-    let airspace_state = Arc::new(RwLock::new(crate::state::AirspaceState::new()));
+    let tacview_state = Arc::new(RwLock::new(crate::state::TacviewState::new()));
 
     // Init main logic loops
     let recognition_handle = tokio::spawn(crate::recognition::recognition_loop(
+        config.common.clone(),
         config.openai.clone(),
+        tacview_state.clone(),
         srs_stream,
         opus_srs_decoder,
         recognition_tx,
@@ -87,11 +89,12 @@ async fn main() -> anyhow::Result<()> {
     ));
     let state_handle = tokio::spawn(crate::state::state_loop(
         tacview_reader,
-        airspace_state.clone(),
+        tacview_state.clone(),
         stopper.clone(),
     ));
     let gci_handle = tokio::spawn(crate::gci::gci_loop(
-        airspace_state,
+        config.common.clone(),
+        tacview_state,
         recognition_rx,
         transmission_tx,
         stopper.clone(),

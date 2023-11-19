@@ -1,3 +1,8 @@
+[common]
+callsign = "Magic"
+# One of "Blue", or "Red"
+coalition = "Blue"
+
 [tacview]
 host = "example.com"
 port = 42674
@@ -8,11 +13,9 @@ username = "magic-bot"
 host = "example.com"
 port = 5002
 username = "Magic Bot"
-# If your SRS server do not have EAM password, set it to ""
-password = ""
-# One of "Spectator", "Blue", "Red"
+# One of "Spectator", "Blue", or "Red"
 coalition = "Blue"
-frequency = 134000000
+frequency = 136000000
 
 [openai]
 api_key = "OPENAI_API_KEY"

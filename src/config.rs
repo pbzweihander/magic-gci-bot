@@ -4,13 +4,41 @@ use anyhow::Context;
 use clap::Parser;
 use serde::Deserialize;
 
-#[derive(Debug, Clone, Parser)]
+#[derive(Clone, Parser)]
 pub struct CliConfig {
     #[arg(short, long, default_value = "config.toml")]
     pub config: PathBuf,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Clone, Deserialize)]
+pub enum Coalition {
+    Blue,
+    Red,
+}
+
+impl Coalition {
+    pub fn flip(&self) -> Self {
+        match self {
+            Self::Blue => Self::Red,
+            Self::Red => Self::Blue,
+        }
+    }
+
+    pub fn as_tacview_coalition(&self) -> &'static str {
+        match self {
+            Self::Blue => "Enemies",
+            Self::Red => "Allies",
+        }
+    }
+}
+
+#[derive(Clone, Deserialize)]
+pub struct CommonConfig {
+    pub callsign: String,
+    pub coalition: Coalition,
+}
+
+#[derive(Clone, Deserialize)]
 pub struct TacviewConfig {
     pub host: String,
     pub port: u16,
@@ -19,7 +47,7 @@ pub struct TacviewConfig {
     pub password: Option<String>,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Clone, Deserialize)]
 pub enum SrsConfigCoalition {
     Spectator,
     Blue,
@@ -36,25 +64,25 @@ impl From<SrsConfigCoalition> for srs::message::Coalition {
     }
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Clone, Deserialize)]
 pub struct SrsConfig {
     pub host: String,
     pub port: u16,
     pub username: String,
-    pub password: String,
     pub coalition: SrsConfigCoalition,
     pub frequency: u64,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Clone, Deserialize)]
 pub struct OpenAiConfig {
     pub api_key: String,
     pub speech_voice: String,
     pub speech_speed: f64,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Clone, Deserialize)]
 pub struct Config {
+    pub common: CommonConfig,
     pub tacview: TacviewConfig,
     pub srs: SrsConfig,
     pub openai: OpenAiConfig,

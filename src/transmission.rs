@@ -12,17 +12,43 @@ use stopper::Stopper;
 
 use crate::config::OpenAiConfig;
 
+#[derive(Debug)]
+pub struct OutgoingTransmission {
+    pub to_callsign: String,
+    pub from_callsign: String,
+    pub message: String,
+}
+
+impl OutgoingTransmission {
+    fn to_speech_string(&self) -> String {
+        format!(
+            "{}, {}, {}",
+            self.to_callsign, self.from_callsign, self.message
+        )
+    }
+}
+
 pub async fn transmission_loop(
     openai_config: OpenAiConfig,
     mut srs_sink: SplitSink<VoiceStream, Vec<u8>>,
-    mut transmission_rx: tokio::sync::mpsc::UnboundedReceiver<String>,
+    mut transmission_rx: tokio::sync::mpsc::UnboundedReceiver<OutgoingTransmission>,
     stopper: Stopper,
 ) {
-    while let Some(line) = stopper.stop_future(transmission_rx.recv()).await.flatten() {
-        if let Err(error) = transmit(line, &openai_config, &mut srs_sink).await {
+    while let Some(outgoing_transmission) =
+        stopper.stop_future(transmission_rx.recv()).await.flatten()
+    {
+        tracing::info!(?outgoing_transmission, "outgoing transmission");
+        if let Err(error) = transmit(
+            outgoing_transmission.to_speech_string(),
+            &openai_config,
+            &mut srs_sink,
+        )
+        .await
+        {
             tracing::error!(%error, "transmit error");
         }
     }
+    tracing::info!("exiting transmission loop");
 }
 
 async fn transmit(
