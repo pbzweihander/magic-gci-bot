@@ -264,7 +264,7 @@ fn handle_bogey_dope(
                         to_callsign: incoming_transmission.from_callsign,
                         from_callsign: common_config.callsign.clone(),
                         message: format!(
-                            "bandit braa {bearing_str}, {range}, {altitude_str}, {aspect}, hostile, {ty}"
+                            "lead group braa {bearing_str}, {range}, {altitude_str}, {aspect}, hostile, {ty}"
                         ),
                     });
                 } else {
