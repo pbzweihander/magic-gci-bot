@@ -243,14 +243,14 @@ fn handle_bogey_dope(
                     let aspect_degrees = (((bearing - bandit_heading) as isize) + 360) % 360;
                     let bandit_heading_cardinal = get_cardinal_point(bandit_heading);
                     let aspect = match aspect_degrees {
-                        0..=65 | 295..=360 => {
-                            format!("dragging {}", bandit_heading_cardinal)
+                        0..=60 | 300..=360 => {
+                            format!("drag {}", bandit_heading_cardinal)
                         }
-                        66..=115 | 245..=294 => {
-                            format!("beaming {}", bandit_heading_cardinal)
+                        61..=100 | 260..=299 => {
+                            format!("beam {}", bandit_heading_cardinal)
                         }
-                        116..=155 | 205..=244 => {
-                            format!("flanking {}", bandit_heading_cardinal)
+                        101..=140 | 220..=259 => {
+                            format!("flank {}", bandit_heading_cardinal)
                         }
                         _ => "hot".to_string(),
                     };
@@ -263,7 +263,9 @@ fn handle_bogey_dope(
                     let _ = transmission_tx.send(OutgoingTransmission {
                         to_callsign: incoming_transmission.from_callsign,
                         from_callsign: common_config.callsign.clone(),
-                        message: format!("bandit braa {bearing_str}, for {range} miles, {altitude_str}, {aspect}, type {ty}"),
+                        message: format!(
+                            "bandit braa {bearing_str}, {range}, {altitude_str}, {aspect}, hostile, {ty}"
+                        ),
                     });
                 } else {
                     let _ = transmission_tx.send(OutgoingTransmission {
